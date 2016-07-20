@@ -1,13 +1,5 @@
 package core.game;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.swing.JOptionPane;
-
 import core.SpriteGroup;
 import core.VGDLFactory;
 import core.VGDLRegistry;
@@ -22,11 +14,18 @@ import core.game.GameDescription.SpriteData;
 import core.game.GameDescription.TerminationData;
 import core.player.AbstractPlayer;
 import core.termination.Termination;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.swing.JOptionPane;
 import ontology.Types;
 import ontology.avatar.MovingAvatar;
 import ontology.effects.Effect;
 import ontology.effects.TimeEffect;
 import ontology.sprites.Resource;
+import tools.StatTracker;
 import tools.IO;
 import tools.JEasyFrame;
 import tools.KeyHandler;
@@ -272,6 +271,11 @@ public abstract class Game
      * Avatar last action.
      */
     protected Types.ACTIONS avatarLastAction;
+    
+    /**
+     * Stat tracker.
+     */
+    protected StatTracker statTracker;
 
     /**
      * Default constructor.
@@ -294,6 +298,9 @@ public abstract class Game
         nextSpriteID = 0;
 
         loadDefaultConstr();
+        
+        //Stat tracker
+        statTracker = StatTracker.getInstance();
     }
 
     /**
@@ -949,8 +956,16 @@ public abstract class Game
 
         //Prints the result: score, time and winner.
         printResult();
+        saveResult();
+        
 
         return score;
+    }
+    
+    private void saveResult()
+    {
+        boolean win = (winner.key()== 1);
+        statTracker.add(win, score, this.getGameTick());
     }
 
     /**

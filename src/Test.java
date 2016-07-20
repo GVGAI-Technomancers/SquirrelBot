@@ -1,7 +1,7 @@
+import core.ArcadeMachine;
 import java.lang.annotation.Repeatable;
 import java.util.Random;
-
-import core.ArcadeMachine;
+import tools.StatTracker;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +15,8 @@ public class Test
 
     public static void main(String[] args)
     {
+        StatTracker statTracker = new StatTracker();
+        
         //Available controllers:
     	String sampleRandomController = "controllers.sampleRandom.Agent";
     	String doNothingController = "controllers.doNothing.Agent";
@@ -58,9 +60,9 @@ public class Test
         //Game and level to play
         int gameIdx = 0;
         int levelIdx = 0; //level names from 0 to 4 (game_lvlN.txt).
-        String game = gamesPath + "realsokoban.txt";//games[gameIdx] + ".txt";
-        String level1 = gamesPath + "realsokoban_lvl0.txt";//games[gameIdx] + "_lvl" + levelIdx +".txt";
-
+        String game = gamesPath + "aliens.txt";//games[gameIdx] + ".txt";
+        String level1 = gamesPath + "aliens_lvl0.txt";//games[gameIdx] + "_lvl" + levelIdx +".txt";
+        statTracker.setCurrGame(game);
         String recordLevelFile = generateLevelPath + games[gameIdx] + "_glvl.txt";
         String recordActionsFile = null;//"actions_" + games[gameIdx] + "_lvl" + levelIdx + "_" + seed + ".txt"; //where to record the actions executed. null if not to save.
 
@@ -75,13 +77,14 @@ public class Test
         //ArcadeMachine.replayGame(game, level1, visuals, readActionsFile);
 
         // 4. This plays a single game, in N levels, M times :
-        //String level2 = gamesPath + games[gameIdx] + "_lvl" + 1 +".txt";
-        //int M = 3;
-        //for(int i=0; i<games.length; i++){
-        //	game = gamesPath + games[i] + ".txt";
-        //	level1 = gamesPath + games[i] + "_lvl" + levelIdx +".txt";
-        //	ArcadeMachine.runGames(game, new String[]{level1}, 5, evolutionStrategies, null);
-        //}
+//        String level2 = gamesPath + games[gameIdx] + "_lvl" + 1 +".txt";
+//        int M = 3;
+//        for(int i=0; i<games.length; i++){
+//        	game = gamesPath + games[i] + ".txt";
+//                statTracker.setCurrGame(game);
+//        	level1 = gamesPath + games[i] + "_lvl" + levelIdx +".txt";
+//        	ArcadeMachine.runGames(game, new String[]{level1}, 5, sampleOLMCTSController, null);
+//        }
         
         //5. This starts a game, in a generated level created by a specific level generator
 
@@ -105,5 +108,7 @@ public class Test
             }
             ArcadeMachine.runGames(game, levels, M, kNearestNeighbour, saveActions? actionFiles:null);
         }*/
+        
+        statTracker.save("stats");
     }
 }
