@@ -51,6 +51,7 @@ public class StatTracker {
     
     public void add(String game, boolean win, double score, int timesteps)
     {
+        if(score < 0) score = 0;
         if(gameStats.containsKey(game))
         {
             gameStats.get(game).add(win, score, timesteps);
